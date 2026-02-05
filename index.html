@@ -233,7 +233,7 @@
 
         .cosignatory-card {
             background: linear-gradient(135deg, #FFFAFA 0%, #ebded4 100%);
-            padding: 1.5rem;
+            padding: 0.75rem;
             border-radius: 8px;
             border: 1px solid #ebded4;
             transition: all 0.3s ease;
@@ -300,7 +300,6 @@
 
         .signatory-item {
             background: #FFFAFA;
-            padding: 1rem;
             border-radius: 6px;
             border: 1px solid #ebded4;
             text-align: center;
@@ -311,6 +310,7 @@
             align-items: center;      /* vertical centering */
             justify-content: center;  /* horizontal centering */
             text-align: center;
+            padding: 0.75rem;
         }
 
         .signatory-item:hover {
@@ -642,7 +642,7 @@
       <p>Denna skrivelse är bildad och drivs av:</p>
       <div class="cosignatories-grid" id="coSignatoriesGrid"></div>
      <div class="signatories-section">
-      <h2>Undertecknare</h2>
+      <h2>Alla undertecknare</h2>
       <div class="signatories-count" id="signatoriesCount"></div>
       <div class="search-container"><input type="text" id="searchInput" class="search-input" placeholder="Sök efter namn...">
       </div>
@@ -822,10 +822,8 @@
 
                 if (rawIsCo.toLowerCase() === 'ja') {
                     coSignatories.push(rawName);
-                } else {
-                    allSignatories.push(rawName);
                 }
-
+                allSignatories.push(rawName);
             });
 
             // Optional: Swedish alphabetical sort
