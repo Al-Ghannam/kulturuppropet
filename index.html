@@ -793,22 +793,32 @@
             const rows = csv
                 .trim()
                 .split('\n')
-                .slice(1); // skip header row
+                .slice(1); // skip header
 
+            const seen = new Set();
             const allSignatories = [];
             const coSignatories = [];
 
             rows.forEach(row => {
-                const [name, isCo] = row.split(',').map(v => v.trim());
+                const [rawName, rawIsCo] = row.split(',').map(v => v.trim());
+                if (!rawName) return;
 
-                if (!name) return;
+                // Normalize for deduplication
+                const key = rawName.toLowerCase().replace(/\s+/g, ' ');
 
-                if (isCo === 'Ja') {
-                    coSignatories.push(name);
+                if (seen.has(key)) return;
+                seen.add(key);
+
+                if (rawIsCo === 'Ja') {
+                    coSignatories.push(rawName);
                 } else {
-                    allSignatories.push(name);
+                    allSignatories.push(rawName);
                 }
             });
+
+            // Optional: Swedish alphabetical sort
+            allSignatories.sort((a, b) => a.localeCompare(b, 'sv'));
+            coSignatories.sort((a, b) => a.localeCompare(b, 'sv'));
 
             renderCoSignatories(coSignatories);
             renderSignatories(allSignatories);
@@ -816,6 +826,7 @@
 
             return allSignatories;
         }
+
 
         function renderCoSignatories(names) {
             const container = document.getElementById('coSignatoriesGrid');
