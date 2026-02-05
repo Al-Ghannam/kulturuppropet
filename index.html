@@ -800,7 +800,10 @@
             const coSignatories = [];
 
             rows.forEach(row => {
-                const [rawName, rawIsCo] = row.split(',').map(v => v.trim());
+                const [rawName, rawIsCo = ''] = row
+                    .split(',')
+                    .map(v => v.replace(/\r/g, '').trim());
+
                 if (!rawName) return;
 
                 // Normalize for deduplication
@@ -809,16 +812,18 @@
                 if (seen.has(key)) return;
                 seen.add(key);
 
-                if (rawIsCo === 'Ja') {
+                if (rawIsCo.toLowerCase() === 'ja') {
                     coSignatories.push(rawName);
                 } else {
                     allSignatories.push(rawName);
                 }
+
             });
 
             // Optional: Swedish alphabetical sort
             allSignatories.sort((a, b) => a.localeCompare(b, 'sv'));
             coSignatories.sort((a, b) => a.localeCompare(b, 'sv'));
+
 
             renderCoSignatories(coSignatories);
             renderSignatories(allSignatories);
